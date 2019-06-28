@@ -1,0 +1,235 @@
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
+"""ID scalar type"""
+scalar EntityId
+
+type File {
+  id: EntityId!
+  contentBase64: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  url: String!
+  thumbUrl: String!
+}
+
+input FileCreateInput {
+  contentBase64: String!
+}
+
+input FileEditInput {
+  id: EntityId!
+  contentBase64: String
+}
+
+input FileSearchInput {
+  id: EntityId
+  contentBase64: String
+}
+
+input FileSearchOrderInput {
+  id: OrderEnum
+  contentBase64: OrderEnum
+}
+
+type LoginResponse {
+  token: String!
+  user: User!
+}
+
+type Mutation {
+  emailRegister(input: UserCreateInput!): LoginResponse!
+  emailLogin(password: String!, email: String!): LoginResponse!
+  logout: Boolean!
+  createFile(input: FileCreateInput!): File!
+  updateFile(input: FileEditInput!): File!
+  deleteFiles(ids: [ID!]!): Boolean!
+  createPost(input: PostCreateInput!): Post!
+  updatePost(input: PostEditInput!): Post!
+  deletePosts(ids: [ID!]!): Boolean!
+  createUser(input: UserCreateInput!): User!
+  updateUser(input: UserEditInput!): User!
+  deleteUsers(ids: [ID!]!): Boolean!
+  createVote(input: VoteCreateInput!): Vote!
+  updateVote(input: VoteEditInput!): Vote!
+  deleteVotes(ids: [ID!]!): Boolean!
+}
+
+enum OrderEnum {
+  DESC
+  ASC
+}
+
+type PaginatedFileResponse {
+  items: [File!]!
+  total: Int!
+  hasMore: Boolean!
+  nextPage: Int!
+}
+
+type PaginatedPostResponse {
+  items: [Post!]!
+  total: Int!
+  hasMore: Boolean!
+  nextPage: Int!
+}
+
+type PaginatedUserResponse {
+  items: [User!]!
+  total: Int!
+  hasMore: Boolean!
+  nextPage: Int!
+}
+
+type PaginatedVoteResponse {
+  items: [Vote!]!
+  total: Int!
+  hasMore: Boolean!
+  nextPage: Int!
+}
+
+type Post {
+  id: EntityId!
+  text: String!
+  title: String
+  author: User!
+  parentPost: Post
+  votes: [Vote!]!
+  childPosts: [Post!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input PostCreateInput {
+  text: String!
+  title: String
+  parentPost: PostNestedInput
+}
+
+input PostEditInput {
+  id: EntityId!
+  text: String
+  title: String
+  parentPost: PostNestedInput
+}
+
+input PostNestedInput {
+  id: EntityId
+  text: String
+  title: String
+  parentPost: PostNestedInput
+}
+
+input PostSearchInput {
+  id: EntityId
+  text: String
+  title: String
+  author: ReferenceSearchInput
+  parentPost: ReferenceSearchInput
+}
+
+input PostSearchOrderInput {
+  id: OrderEnum
+  text: OrderEnum
+  title: OrderEnum
+  author: OrderEnum
+  parentPost: OrderEnum
+}
+
+type Query {
+  file(id: EntityId!): File!
+  searchFiles(order: [FileSearchOrderInput!], take: Int, skip: Int, search: FileSearchInput): PaginatedFileResponse!
+  files: [File!]!
+  post(id: EntityId!): Post!
+  searchPosts(order: [PostSearchOrderInput!], take: Int, skip: Int, search: PostSearchInput): PaginatedPostResponse!
+  posts: [Post!]!
+  user(id: EntityId!): User!
+  searchUsers(order: [UserSearchOrderInput!], take: Int, skip: Int, search: UserSearchInput): PaginatedUserResponse!
+  users: [User!]!
+  vote(id: EntityId!): Vote!
+  searchVotes(order: [VoteSearchOrderInput!], take: Int, skip: Int, search: VoteSearchInput): PaginatedVoteResponse!
+  votes: [Vote!]!
+}
+
+input ReferenceSearchInput {
+  id: EntityId
+}
+
+type User {
+  id: EntityId!
+  email: String
+  firstName: String!
+  lastName: String!
+  posts: [Post!]!
+  votes: [Vote!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  fullName: String!
+}
+
+input UserCreateInput {
+  email: String
+  password: String!
+  firstName: String!
+  lastName: String!
+}
+
+input UserEditInput {
+  id: EntityId!
+  email: String
+  password: String
+  firstName: String
+  lastName: String
+}
+
+input UserSearchInput {
+  id: EntityId
+  email: String
+  password: String
+  firstName: String
+  lastName: String
+}
+
+input UserSearchOrderInput {
+  id: OrderEnum
+  email: OrderEnum
+  password: OrderEnum
+  firstName: OrderEnum
+  lastName: OrderEnum
+}
+
+type Vote {
+  id: EntityId!
+  sentiment: Float!
+  post: Post!
+  author: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input VoteCreateInput {
+  sentiment: Float!
+  post: PostNestedInput!
+}
+
+input VoteEditInput {
+  id: EntityId!
+  sentiment: Float
+  post: PostNestedInput
+}
+
+input VoteSearchInput {
+  id: EntityId
+  sentiment: Float
+  post: ReferenceSearchInput
+  author: ReferenceSearchInput
+}
+
+input VoteSearchOrderInput {
+  id: OrderEnum
+  sentiment: OrderEnum
+  post: OrderEnum
+  author: OrderEnum
+}

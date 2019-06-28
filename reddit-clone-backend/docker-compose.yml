@@ -1,0 +1,12 @@
+version: '3'
+services:
+ reddit-clone:
+   container_name: reddit-clone
+   image: postgres:10-alpine
+   restart: always
+   ports:
+   - "11524:5432"
+   environment:
+     POSTGRES_USER: user
+     POSTGRES_PASSWORD: 1234
+     POSTGRES_DB: reddit-clone

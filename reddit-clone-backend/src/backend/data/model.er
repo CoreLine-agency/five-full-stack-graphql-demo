@@ -1,0 +1,32 @@
+User:
+  - email?: string varchar
+  + passwordHash?: string varchar
+  x password
+  - firstName
+  - lastName
+  + role: ADMIN|USER
+
+File:
+  - contentBase64: string text
+  + slug
+
+Post:
+  - text
+  - title?: string varchar
+
+Vote:
+  - sentiment: number integer
+
+Post has one User as author = context.user
+User has many Post as posts
+
+Post has many Vote as votes
+Vote has one Post as post
+
+User has many Vote as votes
+Vote has one User as author = context.user
+
+Post has many Post as childPosts
+Post has one Post as parentPost?
+
+
